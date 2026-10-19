@@ -1,3 +1,5 @@
+PlatformX source preparation: [build/runtime contract and checks](README.platformx.md). No image build or deployment is included.
+
 <p align="center">
   <img src="assets/banner.png" alt="Hermes Agent" width="100%">
 </p>
