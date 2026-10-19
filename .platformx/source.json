@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "upstream_repo": "NousResearch/hermes-agent",
+  "fork_repo": "platformx-os/hermes-agent",
+  "release": "v0.22.2",
+  "upstream_commit": "d923a5eb487a17c0a68801bba9ef0f56c81040a8",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "dockerfile_sha256": "f443976f0409c819993fe6d7e80ef932d3550cc350b9ea49423b8fa35a11490e",
+    "prepare": [
+      [
+        "python3",
+        "scripts/write_install_stamp.py",
+        "--output",
+        "install-stamp.json",
+        "--commit",
+        "${BUILD_SOURCE_COMMIT}",
+        "--base-version",
+        "0.22.2",
+        "--source",
+        "ci",
+        "--distribution",
+        "docker",
+        "--update-mechanism",
+        "external"
+      ]
+    ],
+    "args": {},
+    "validation": "source contract only; no image build or runtime test performed"
+  },
+  "runtime": {
+    "entrypoint": [
+      "/opt/hermes/docker/entrypoint-dispatch.sh"
+    ],
+    "image_command": [],
+    "command": [
+      "gateway",
+      "run"
+    ],
+    "user": {
+      "bootstrap": "root",
+      "service": "hermes",
+      "uid": 10000,
+      "gid": 10000,
+      "overrides": [
+        "HERMES_UID",
+        "HERMES_GID"
+      ]
+    },
+    "state_directory": "/opt/data",
+    "state_environment": {
+      "HERMES_HOME": "/opt/data",
+      "HERMES_WRITE_SAFE_ROOT": "/opt/data"
+    },
+    "workspace_directory": null,
+    "workspace_environment": {},
+    "config_files": [
+      "config.yaml",
+      ".env",
+      "auth.json"
+    ],
+    "auxiliary_state_directories": [],
+    "telegram": {
+      "provisioning": "separate private configuration and distinct bot credential; not initialized by this source contract",
+      "token_environment": "TELEGRAM_BOT_TOKEN",
+      "allowed_users_environment": "TELEGRAM_ALLOWED_USERS",
+      "mode": "upstream polling default; no public ingress required"
+    },
+    "activation_caveats": [
+      "Preserve dispatcher/s6 bootstrap and UID drop. Do not override image entrypoint.",
+      "Bootstrap seeds and may modify state, permissions and API credentials; separately approved first-start validation is required.",
+      "Use default state path: wrapper fixes HOME=/opt/data even when HERMES_HOME is overridden.",
+      "Explicit gateway command follows upstream compose; simultaneous supervised gateway slots must be checked during future startup test."
+    ]
+  },
+  "provenance": {
+    "required_oci_labels": {
+      "org.opencontainers.image.source": "https://github.com/platformx-os/hermes-agent",
+      "org.opencontainers.image.revision": "${BUILD_SOURCE_COMMIT}",
+      "org.opencontainers.image.version": "v0.22.2"
+    },
+    "revision_rule": "BUILD_SOURCE_COMMIT is the exact custom integration commit being built, not the upstream baseline. No floating tag is a deployment pin.",
+    "build_inputs_note": "Upstream Dockerfile is reused unchanged. Its package manager/network build steps are not claimed byte-reproducible; archive dependency/provenance evidence when a future approved build runs."
+  },
+  "license": {
+    "path": "LICENSE",
+    "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6"
+  },
+  "version_validation": {
+    "mode": "release_commit",
+    "metadata_file": "pyproject.toml",
+    "metadata_version": "0.0.0",
+    "warning": "Upstream project metadata is a development placeholder; runtime release identity comes from install-stamp.json. Validate release tag-to-commit and built install stamp before publishing."
+  },
+  "patches": {
+    "legacy_imported": false,
+    "runtime_patches": [],
+    "policy": "No old deployment settings, credentials, conversations, memory or custom feature patches are carried silently. Required future changes belong in reviewed integration PRs."
+  },
+  "preparation": {
+    "actions_enabled": false,
+    "build_performed": false,
+    "deployment_performed": false
+  },
+  "upstream_sources": [
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/Dockerfile",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/docker/entrypoint-dispatch.sh",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/docker/main-wrapper.sh",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/docker/stage2-hook.sh",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/docker-compose.yml",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/scripts/write_install_stamp.py",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/hermes_cli/__init__.py",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/website/docs/user-guide/docker.md",
+    "https://github.com/NousResearch/hermes-agent/blob/d923a5eb487a17c0a68801bba9ef0f56c81040a8/.env.example"
+  ]
+}
